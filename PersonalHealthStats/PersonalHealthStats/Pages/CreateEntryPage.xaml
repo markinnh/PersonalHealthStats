@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:PersonalHealthStats"
+             xmlns:vm="clr-namespace:PersonalHealthStats.ViewModels"
+             x:Class="PersonalHealthStats.CreateEntryPage"
+             Title="Create Entry">
+
+    <StackLayout>
+        <!-- Place new controls here -->
+    	<Label Text="{Binding Title}" 
+           HorizontalOptions="Center" />
+        <Label Text="{Binding EntryDatePrompt}"/>
+        <DatePicker x:Name="pickDate" 
+                    Date="{Binding StartDate}" 
+                    MaximumDate="{Binding MaximumDate}" 
+                    MinimumDate="{Binding MinimumDate}"/>
+        <Label Text="{Binding EntryTimePrompt}"/>
+        <TimePicker x:Name="pickTime" 
+                    Time="{Binding StartTime}"/>
+        <Label Text="{Binding EntryValuePrompt}"/>
+        <Entry x:Name="entryValue" 
+               Text="{Binding BloodSugar}" 
+               Keyboard="Numeric"/>
+        <Label Text="{Binding TestTypePrompt}"/>
+        <Picker x:Name="testType" 
+                ItemsSource="{Binding TestNames}" 
+                SelectedItem="{Binding TestType}"/>
+        <Label Text="{Binding MealInfoPrompt}"/>
+        <Entry x:Name="MealEntry" 
+               Text="{Binding MealInfo}" 
+               MaxLength="250"/>
+        <Button x:Name="saveRecord" 
+                Text="{Binding NewRecordPrompt}" 
+                Command="{Binding SaveRecordCommand}"
+                />
+
+        <Button x:Name="cancelEdit" 
+                Text="{Binding CancelEditPrompt}" 
+                Command="{Binding CancelEditCommand}"/>
+    </StackLayout>
+
+</ContentPage>
