@@ -13,7 +13,7 @@ namespace PersonalHealthStats.ViewModels
     public class CreateEntryViewModel : BaseViewModel
     {
         //Interfaces.IPageAlerter pageAlerter;
-        public CreateEntryViewModel( )
+        public CreateEntryViewModel()
         {
             SaveRecordCommand = new Command(SaveData, CanSaveData);
             CancelEditCommand = new Command(CancelEdit, CanCancelEdit);
@@ -21,12 +21,12 @@ namespace PersonalHealthStats.ViewModels
             InitDependencies();
             MessagingCenter.Subscribe<BrowseEntryPage, BloodSugarEntry>(this, Constants.SelectedEntryMessage, (sender, arg) =>
             {
-                startDate = arg.EntryDateTime.Date;
-                startTime = arg.EntryDateTime.TimeOfDay;
-                bloodSugar = arg.EntryValue;
-                testType = arg.GetReadableName();
-                mealInfo = arg.Meal;
-                UpdateDependencies(Constants.SelectedEntryMessage);
+                //startDate = arg.EntryDateTime.Date;
+                //startTime = arg.EntryDateTime.TimeOfDay;
+                //bloodSugar = arg.EntryValue;
+                //testType = arg.GetReadableName();
+                //mealInfo = arg.Meal;
+                //UpdateDependencies(Constants.SelectedEntryMessage);
                 //NotifyPropertyChanged(nameof(StartDate));
                 //NotifyPropertyChanged(nameof(StartTime));
                 //NotifyPropertyChanged(nameof(BloodSugar));
@@ -35,7 +35,17 @@ namespace PersonalHealthStats.ViewModels
             });
 
         }
-
+        private BloodSugarEntry bloodSugarEntry;
+        public BloodSugarEntry Entry
+        {
+            get => bloodSugarEntry; set
+            {
+                if (bloodSugarEntry == value)
+                    return;
+                bloodSugarEntry = value;
+                NotifyPropertyChanged(nameof(Entry));
+            }
+        }
         //private void SelectedEntryChanged(BrowseEntryPage arg1, BloodSugarEntry arg2)
         //{
         //    if(arg2 != null)
@@ -60,12 +70,16 @@ namespace PersonalHealthStats.ViewModels
 
         private void CancelEdit(object obj)
         {
-            StartDate = DateTime.Today;
-            StartTime = DateTime.Now.TimeOfDay;
-            BloodSugar = 0;
-            MealInfo = string.Empty;
-            TestType = string.Empty;
 
+            Entry.EntryDateTime = DateTime.Now;
+            //StartTime = DateTime.Now.TimeOfDay;
+            //BloodSugar = 0;
+            //MealInfo = string.Empty;
+            //TestType = string.Empty;
+            Entry.EntryType = EntryType.BeforeBreakfast;
+            Entry.EntryValue = 0;
+            Entry.Meal = string.Empty;
+            NotifyPropertyChanged(nameof(Entry));
         }
 
         private bool CanSaveData(object arg)
@@ -76,8 +90,8 @@ namespace PersonalHealthStats.ViewModels
         private void SaveData(object obj)
         {
 
-            if (BloodSugar == 0 || string.IsNullOrEmpty(testType))
-                MessagingCenter.Send(this,Constants.DoMessage,new Payload.OneOptionMessagePayload() { Title = "Alert", Message = "A valid entry requires a Test Type and Blood Sugar value to be defined", CancelText = "Ok" });
+            if (Entry.EntryValue == 0)
+                MessagingCenter.Send(this, Constants.DoMessage, new Payload.OneOptionMessagePayload() { Title = "Alert", Message = "A valid entry requires a Test Type and Blood Sugar value to be defined", CancelText = "Ok" });
 
             else
             {
@@ -91,7 +105,11 @@ namespace PersonalHealthStats.ViewModels
                 //    Meal = MealInfo
                 //};
                 //ownerViewModel.GetTestData().EntryOwner.BloodSugarEntries.Add(newEntry);
-                TestData.MyData.EntryOwner.AddEntry(BloodSugar, StartDate + StartTime, TestType, MealInfo);
+                //TestData.MyData.EntryOwner.AddEntry(BloodSugar, StartDate + StartTime, TestType, MealInfo);
+                if (Entry.BloodSugarEntryID != 0)
+                {
+                    TestData.MyData.EntryOwner.AddEntry(Entry);
+                }
             }
             //throw new NotImplementedException();
         }
@@ -101,33 +119,33 @@ namespace PersonalHealthStats.ViewModels
             base.InitDependencies();
 
             var dependencyNames = new string[] { nameof(SaveRecordCommand), nameof(CancelEditCommand) };
-            Dependencies.Add(nameof(BloodSugar), dependencyNames);
-            Dependencies.Add(nameof(TestType), dependencyNames);
-            Dependencies.Add(nameof(StartDate), dependencyNames);
-            Dependencies.Add(nameof(StartTime), dependencyNames);
-            Dependencies.Add(nameof(MealInfo), dependencyNames);
-            Dependencies.Add(Constants.SelectedEntryMessage, new string[] { nameof(BloodSugar), nameof(TestType), nameof(StartDate), nameof(StartTime), nameof(MealInfo) });
+            //Dependencies.Add(nameof(BloodSugar), dependencyNames);
+            //Dependencies.Add(nameof(TestType), dependencyNames);
+            //Dependencies.Add(nameof(StartDate), dependencyNames);
+            //Dependencies.Add(nameof(StartTime), dependencyNames);
+            //Dependencies.Add(nameof(MealInfo), dependencyNames);
+            //Dependencies.Add(Constants.SelectedEntryMessage, new string[] { nameof(BloodSugar), nameof(TestType), nameof(StartDate), nameof(StartTime), nameof(MealInfo) });
             //throw new NotImplementedException();
         }
 
-        protected override void UpdateDependencies(string PropertyName)
-        {
-            base.UpdateDependencies(PropertyName);
-            //throw new NotImplementedException();
-        }
+        //protected override void UpdateDependencies(string PropertyName)
+        //{
+        //    base.UpdateDependencies(PropertyName);
+        //    //throw new NotImplementedException();
+        //}
 
-        protected void UpdateEntryDateTime(DateTime dateTime)
-        {
-            UpdateControlsForExistingEntry(dateTime + StartTime);
+        //protected void UpdateEntryDateTime(DateTime dateTime)
+        //{
+        //    UpdateControlsForExistingEntry(dateTime + StartTime);
 
-            Set<DateTime>(ref startDate, dateTime, nameof(StartDate));
-        }
+        //    Set<DateTime>(ref startDate, dateTime, nameof(StartDate));
+        //}
 
-        protected void UpdateEntryDateTime(TimeSpan timeSpan)
-        {
-            UpdateControlsForExistingEntry(StartDate + timeSpan);
-            Set<TimeSpan>(ref startTime, timeSpan, nameof(StartTime));
-        }
+        //protected void UpdateEntryDateTime(TimeSpan timeSpan)
+        //{
+        //    UpdateControlsForExistingEntry(StartDate + timeSpan);
+        //    //Set<TimeSpan>(ref startTime, timeSpan, nameof(StartTime));
+        //}
 
         /// <summary>
         /// Check for an existing entry at the passed datetime
@@ -138,9 +156,11 @@ namespace PersonalHealthStats.ViewModels
             var lookup = TestData.MyData.EntryOwner.LookupEntry(dateTime);
             if (lookup != null)
             {
-                BloodSugar = lookup.EntryValue;
-                TestType = lookup.GetReadableName();
-                MealInfo = lookup.Meal;
+                //BloodSugar = lookup.EntryValue;
+                //TestType = lookup.GetReadableName();
+                //MealInfo = lookup.Meal;
+                Entry = lookup;
+                NotifyPropertyChanged(nameof(Entry));
             }
         }
 
@@ -164,23 +184,23 @@ namespace PersonalHealthStats.ViewModels
 
         public string NewRecordPrompt { get => "Save Changes"; }
 
+        // TODO: Handle Date and Time as separate entities
+        //private DateTime startDate = DateTime.Today;
+        //public DateTime StartDate { get => Entry.EntryDateTime.Date; set => UpdateEntryDateTime(value); }
 
-        private DateTime startDate = DateTime.Today;
-        public DateTime StartDate { get => startDate; set => UpdateEntryDateTime(value); }
+        //private TimeSpan startTime = DateTime.Now.TimeOfDay;
+        //public TimeSpan StartTime { get => Entry.EntryDateTime.TimeOfDay; set => UpdateEntryDateTime(value); }
 
-        private TimeSpan startTime = DateTime.Now.TimeOfDay;
-        public TimeSpan StartTime { get => startTime; set => UpdateEntryDateTime(value); }
-
-        private decimal bloodSugar;
-        public decimal BloodSugar { get => bloodSugar; set => Set<decimal>(ref bloodSugar, value, nameof(BloodSugar)); }
+        //private decimal bloodSugar;
+        //public decimal BloodSugar { get => bloodSugar; set => Set<decimal>(ref bloodSugar, value, nameof(BloodSugar)); }
 
         public string[] TestNames { get => BloodSugarEntry.GetTestTypeNames(); }
 
-        private string testType = BloodSugarEntry.GetReadableTestTypeName(EntryType.BeforeBreakfast);
-        public string TestType { get => testType; set => Set<string>(ref testType, value, nameof(TestType)); }
+        //private string testType = BloodSugarEntry.GetReadableTestTypeName(EntryType.BeforeBreakfast);
+        //public string TestType { get => testType; set => Set<string>(ref testType, value, nameof(TestType)); }
 
-        private string mealInfo = string.Empty;
-        public string MealInfo { get => mealInfo; set => Set<string>(ref mealInfo, value, nameof(MealInfo)); }
+        //private string mealInfo = string.Empty;
+        //public string MealInfo { get => mealInfo; set => Set<string>(ref mealInfo, value, nameof(MealInfo)); }
 
         public ICommand SaveRecordCommand { get; protected set; }
 

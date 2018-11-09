@@ -18,13 +18,6 @@ namespace PersonalHealthStats.Models
     public partial class BloodSugarEntry
     {
         //const int daysToGetStatsFor = 60;
-        const string beforeBreakfast = "Before Breakfast";
-        const string afterBreakfast = "After Breakfast";
-        const string beforeLunch = "Before Lunch";
-        const string afterLunch = "After Lunch";
-        const string beforeDinner = "Before Dinner";
-        const string afterDinner = "After Dinner";
-        const string beforeBed = "Before Bed";
 
         [PrimaryKey,AutoIncrement]
         public int BloodSugarEntryID { get; set; }
@@ -51,25 +44,25 @@ namespace PersonalHealthStats.Models
 
             switch (target)
             {
-                case beforeBreakfast:
+                case Constants.BeforeBreakfast:
                     result = EntryType.BeforeBreakfast;
                     break;
-                case afterBreakfast:
+                case Constants.AfterBreakfast:
                     result = EntryType.AfterBreakfast;
                     break;
-                case beforeLunch:
+                case Constants.BeforeLunch:
                     result = EntryType.BeforeLunch;
                     break;
-                case afterLunch:
+                case Constants.AfterLunch:
                     result = EntryType.AfterLunch;
                     break;
-                case beforeDinner:
+                case Constants.BeforeDinner:
                     result = EntryType.BeforeDinner;
                     break;
-                case afterDinner:
+                case Constants.AfterDinner:
                     result = EntryType.AfterDinner;
                     break;
-                case beforeBed:
+                case Constants.BeforeBed:
                     result = EntryType.BeforeBed;
                     break;
                 default:
@@ -88,25 +81,25 @@ namespace PersonalHealthStats.Models
             switch (entryType)
             {
                 case EntryType.BeforeBreakfast:
-                    result = beforeBreakfast;
+                    result = Constants.BeforeBreakfast;
                     break;
                 case EntryType.AfterBreakfast:
-                    result = afterBreakfast;
+                    result = Constants.AfterBreakfast;
                     break;
                 case EntryType.BeforeLunch:
-                    result = beforeLunch;
+                    result = Constants.BeforeLunch;
                     break;
                 case EntryType.AfterLunch:
-                    result = afterLunch;
+                    result = Constants.AfterLunch;
                     break;
                 case EntryType.BeforeDinner:
-                    result = beforeDinner;
+                    result = Constants.BeforeDinner;
                     break;
                 case EntryType.AfterDinner:
-                    result = afterDinner;
+                    result = Constants.AfterDinner;
                     break;
                 case EntryType.BeforeBed:
-                    result = beforeBed;
+                    result = Constants.BeforeBed;
                     break;
                 default:
                     break;
@@ -116,7 +109,7 @@ namespace PersonalHealthStats.Models
         }
         internal static string[] GetTestTypeNames()
         {
-            return new string[] { beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeBed };
+            return new string[] { Constants.BeforeBreakfast, Constants.AfterBreakfast, Constants.BeforeLunch, Constants.AfterLunch, Constants.BeforeDinner, Constants.AfterDinner, Constants.BeforeBed };
         }
     }
 }

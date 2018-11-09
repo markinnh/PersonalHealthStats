@@ -9,9 +9,11 @@ namespace PersonalHealthStats
 	{
 		public App ()
 		{
+
 			InitializeComponent();
 
-			MainPage = new MainPage();
+            //MainPage = new MainPage();
+            MainPage = new MasterDetailPage1();
 		}
 
 		protected override void OnStart ()

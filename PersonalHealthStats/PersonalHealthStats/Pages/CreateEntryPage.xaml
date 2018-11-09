@@ -5,30 +5,35 @@
              xmlns:vm="clr-namespace:PersonalHealthStats.ViewModels"
              x:Class="PersonalHealthStats.CreateEntryPage"
              Title="Create Entry">
-
+    <ContentPage.Resources>
+        <local:EntryTypeConverter x:Key="EntryTypeConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:CreateEntryViewModel/>
+    </ContentPage.BindingContext>
     <StackLayout>
         <!-- Place new controls here -->
     	<Label Text="{Binding Title}" 
            HorizontalOptions="Center" />
         <Label Text="{Binding EntryDatePrompt}"/>
         <DatePicker x:Name="pickDate" 
-                    Date="{Binding StartDate}" 
+                    Date="{Binding Entry.EntryDateTime.Date}" 
                     MaximumDate="{Binding MaximumDate}" 
                     MinimumDate="{Binding MinimumDate}"/>
         <Label Text="{Binding EntryTimePrompt}"/>
         <TimePicker x:Name="pickTime" 
-                    Time="{Binding StartTime}"/>
+                    Time="{Binding Entry.EntryDateTime.TimeOfDay}"/>
         <Label Text="{Binding EntryValuePrompt}"/>
         <Entry x:Name="entryValue" 
-               Text="{Binding BloodSugar}" 
+               Text="{Binding Entry.EntryValue}" 
                Keyboard="Numeric"/>
         <Label Text="{Binding TestTypePrompt}"/>
         <Picker x:Name="testType" 
                 ItemsSource="{Binding TestNames}" 
-                SelectedItem="{Binding TestType}"/>
+                SelectedItem="{Binding Entry.EntryType, Converter={StaticResource EntryTypeConverter}}"/>
         <Label Text="{Binding MealInfoPrompt}"/>
         <Entry x:Name="MealEntry" 
-               Text="{Binding MealInfo}" 
+               Text="{Binding Entry.Meal}" 
                MaxLength="250"/>
         <Button x:Name="saveRecord" 
                 Text="{Binding NewRecordPrompt}" 

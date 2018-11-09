@@ -46,5 +46,16 @@ namespace PersonalHealthStats
         /// </summary>
         internal const string TestDataStored = "TestDataStored";
         internal const string ActiveOwnerName = "ActiveOwnerName";
+
+        internal const bool ResetTables = false;
+
+        internal const string BeforeBreakfast = "Before Breakfast";
+        internal const string AfterBreakfast = "After Breakfast";
+        internal const string BeforeLunch = "Before Lunch";
+        internal const string AfterLunch = "After Lunch";
+        internal const string BeforeDinner = "Before Dinner";
+        internal const string AfterDinner = "After Dinner";
+        internal const string BeforeBed = "Before Bed";
+
     }
 }

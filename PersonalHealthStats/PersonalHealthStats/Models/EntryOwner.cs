@@ -119,6 +119,25 @@ namespace PersonalHealthStats.Models
 
         }
 
+        internal void AddEntry(BloodSugarEntry entry)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UpdateEntry(BloodSugarEntry entry)
+        {
+            if(entry != null)
+            {
+                if (entry.BloodSugarEntryID == 0) { 
+                    AddEntry(entry);
+                    return;
+                }
+
+
+            }
+            throw new NotImplementedException();
+        }
+
         public BloodSugarEntry LookupEntry(DateTime EntryDateTime)
         {
             return BloodSugarEntries.Where(e => e.EntryDateTime == EntryDateTime).FirstOrDefault();

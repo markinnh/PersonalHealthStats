@@ -1,4 +1,4 @@
-﻿//#define UseTestData
+﻿#define PREPOPULATE //#define UseTestData
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +16,9 @@ namespace PersonalHealthStats
             //EntryOwner.AccountType = Models.AccountType.Testing;
 #if UseTestData
             genTestEntries();
-#else
+#endif
+
+#if PREPOPULATE
             var lookup = Data.HealthStats.Database.LookupEntryOwner("Mark");
             if (lookup == null)
             {

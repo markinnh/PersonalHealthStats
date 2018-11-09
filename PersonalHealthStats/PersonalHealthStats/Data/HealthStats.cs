@@ -26,19 +26,27 @@ namespace PersonalHealthStats.Data
             }
         }
 
+        internal static bool ResettingTables { get; set; } = Constants.ResetTables;
+        internal static bool Initialized { get; set; } = false;
+
         protected SQLiteAsyncConnection Connection { get; set; }
 
         internal HealthStats(string PathAndFile)
         {
             Connection = new SQLiteAsyncConnection(PathAndFile);
-            //Connection.DropTableAsync<Models.BloodSugarEntry>().Wait();
-            //Connection.DropTableAsync<Models.EntryOwner>().Wait();
-            //Connection.DropTableAsync<Models.StoredSetting>().Wait();
+
+            if (ResettingTables)
+            {
+                Connection.DropTableAsync<Models.BloodSugarEntry>().Wait();
+                Connection.DropTableAsync<Models.EntryOwner>().Wait();
+                Connection.DropTableAsync<Models.StoredSetting>().Wait();
+            }
+
             Connection.CreateTableAsync<Models.BloodSugarEntry>().Wait();
             Connection.CreateTableAsync<Models.EntryOwner>().Wait();
             Connection.CreateTableAsync<Models.StoredSetting>().Wait();
             Connection.CreateTableAsync<Models.BloodSugarStat>().Wait();
-
+            Initialized = true;
         }
         ~HealthStats()
         {

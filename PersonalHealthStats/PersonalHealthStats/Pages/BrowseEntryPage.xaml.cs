@@ -49,7 +49,7 @@ namespace PersonalHealthStats
             {
                 if (e.SelectedItem is Models.BloodSugarEntry entry)
                 {
-                    MessagingCenter.Send<BrowseEntryPage, Models.BloodSugarEntry>(this, Constants.SelectedEntryMessage, entry);
+                    MessagingCenter.Send(this, Constants.SelectedEntryMessage, entry);
                 }
             }
             catch (System.Reflection.TargetInvocationException ex)
